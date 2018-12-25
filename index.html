@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>GitVis By Nova Kwok</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+	</head>
+	<body>
+			<canvas id="chart"></canvas>
+	</body>
+<script>
+	var gcommit = [];
+	var gdate = [];
+	var tcommit = [];
+	$.getJSON("./data.json", function(data) {
+		data.forEach(function(item) {
+			gcommit.push(item.count);
+			gdate.push(item.date);
+		})
+		gcommit.reverse();
+		gdate.reverse();
+
+		$.getJSON("./t_data.json", function(data) {
+			data.forEach(function(item) {
+				tcommit.push(item.count);
+			})
+			tcommit.reverse();
+
+
+			new Chart(document.getElementById("chart"), {
+				type: 'line',
+				data: {
+					labels: gdate,
+					datasets: [{
+							label: "GitHub Chart",
+							data: gcommit,
+							fill: true
+						},
+						{
+							label: "T-Chart",
+							data: tcommit,
+							borderColor: "#8e5ea2",
+							fill: true
+						}
+					]
+				},
+				options: {
+					legend: {
+						display: true
+					},
+					title: {
+						display: true,
+						text: 'GitHub Chart with T-Chart'
+					}
+				}
+			});
+		});
+	});
+</script>
+</html>
